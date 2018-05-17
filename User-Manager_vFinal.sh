@@ -9,7 +9,12 @@ DONE="1"
 clear
 while [ $DONE != "0" ]
 do
-echo -e "Escolha uma das opções\n1 - Criar usuário\n2 - Alterar Senha\n3 - Deletar usuário\n4 - Criar grupo\n5 - Adicionar usuário a grupo\n6 - Excluir grupo\n7 - Relação de usuários\n8 - Sair"
+if [ "$EUID" -ne 0 ]; then
+	echo "`date -u` - Execute o script como root"
+	exit
+else
+	echo -e "Escolha uma das opções\n1 - Criar usuário\n2 - Alterar Senha\n3 - Deletar usuário\n4 - Criar grupo\n5 - Adicionar usuário a grupo\n6 - Excluir grupo\n7 - Relação de usuários\n8 - Sair"	
+fi
 read NUM
 case $NUM in
 	# Criar usuário
