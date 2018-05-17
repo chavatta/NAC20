@@ -1,7 +1,7 @@
 #!/bin/bash
 # Gerenciador de usuários #
 # Comandos base		  #
-###########################
+#############################
 clear
 cd ~
 mkdir Relatorios
