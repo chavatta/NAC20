@@ -163,7 +163,7 @@ case $NUM in
 					;;
 			esac
 		done
-		echo "`date - u` - A lista de usuários foi gerada no diretorio de Relatorios";
+		echo "`date -u` - A lista de usuários foi gerada no diretorio de Relatorios";
 		DONE=0
 	;;	
 	#EXIT
@@ -172,7 +172,7 @@ case $NUM in
 	DONE=0
 	;;
 	*)
-		echo "`date - u` - Comando Invalido";
+		echo "`date -u` - Comando Invalido";
 		DONE=1
 	;;
 	esac
