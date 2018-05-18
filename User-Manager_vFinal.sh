@@ -22,7 +22,7 @@ case $NUM in
 		clear
 		echo "`date -u` - Digite o usuário que deseja que seja criado"
 		read USER
-		RESP=$(getent passwd | grep $USER)
+		RESP=$(getent passwd $USER)
 		test -z $RESP
 		if [ $? -eq 1 ]; then
 			echo "`date -u` - O Usuário $USER já existe"
@@ -34,6 +34,8 @@ case $NUM in
 		fi
 		COUNT=$(echo $PASS | wc -c)
 		if [ $COUNT -lt 7 ]; then
+			userdel -r $USER
+			clear
 			echo "`date -u` - Senha Invalida"
 			exit
 		else
@@ -47,7 +49,7 @@ case $NUM in
 		clear
 		echo "`date -u` - Digite o usuário que deseja alterar a senha"
 		read USER
-		RESP=$(getent passwd | grep $USER)
+		RESP=$(getent passwd $USER)
 		test -z $RESP
 		if [ $? -eq 0 ]; then
 			echo "`date -u` - O usuário $USER não exite"
@@ -69,15 +71,15 @@ case $NUM in
 	# Deletar Usuário
 	3)
 		clear
-		echo "`Date -u` - Digite o usuário que deseja deletar"
+		echo "`date -u` - Digite o usuário que deseja deletar"
 		read USER
-		RESP=$(getent passwd | grep $USER)
+		RESP=$(getent passwd $USER)
 		test -z $RESP
 		if [ $? -eq 0 ]; then
 			echo "`date -u` - O usuário $USER não exite"
 			exit
 		else
-			deluser $USER
+			userdel -r $USER
 		fi
 		clear ; echo "`date -u` - O usuáio $USER foi deletado";
 		DONE=0
@@ -101,15 +103,15 @@ case $NUM in
 	#Adicionar usuário ao grupo
 	5)
 		clear
-		echo "`date -u ` - Digite o usuário que você deseja alterar"
+		echo "`date -u` - Digite o usuário que você deseja alterar"
 		read USER
-		VALID_USER=$(getent passwd | grep $USER)
+		VALID_USER=$(getent passwd $USER)
 		test -z $VALID_USER
 		if [ $? -eq 0 ]; then
-			echo "`date -u` - O usuário $USER  não existe"
+			echo "`date -u` - O usuário $USE não existe"
 			exit
 		else
-			echo "`date -ù` - Digite o grupo que deseja adicionar o usuário $USER"
+			echo "`date -u` - Digite o grupo que deseja adicionar o usuário $USER"
 			read GROUP
 			VALID_GROUP=$(cut -d: -f1 /etc/group | grep $GROUP)
 			test -z $VALID_GROUP
@@ -117,10 +119,17 @@ case $NUM in
 				echo "`date -u` - O Grupo $GROUP é um grupo invalido"
 				exit
 			else
+				VALID_USERGROUP=$(cut -d: -f4 /etc/group | grep $USER)
+				test -z $VALID_USERGROUP
+				if [ $? -eq 1 ]; then
+					echo "`date -u` - O usuário $USER já� pertence ao $GROUP"
+					exit
+				else		
 				usermod -a -G $GROUP $USER
+				fi
 			fi
 		fi
-		clear ; echo "`date -u` - O usuário $USER foi adiconado ao grupo $GROUP.";
+		clear ; echo "`date -u` - O usuário $USER foi adiconado ao grupo $GROUP";
 		DONE=0
 	;;
 	#Excluir Grupos
@@ -182,4 +191,4 @@ case $NUM in
 	;;
 	esac
 done
-exit 0 
+exit 0
